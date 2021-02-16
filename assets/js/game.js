@@ -23,8 +23,18 @@ var startGame = function() {
 
             // Pass the pickedEnemyObj variable's value into the fight function, where it will assume the value of the enemy parameter
             fight(pickedEnemyObj);
+            // if player is still alive after the fight and we're not at the last enemy in the array
+            if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
+            // ask if player wants to use the store before next round
+            var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
 
+            // if yes, take them to the store() function
+            if (storeConfirm) {
+                shop();
         }
+      }
+
+    }
         else {
             window.alert("You have lost your robot in battle! Game Over!");
             break;
@@ -105,12 +115,11 @@ var fightOrSkip = function() {
 
                 // Return true if player wants to leave
                 return true;
-                }
-            else {
-                return false;
             }
     }
-}
+    return false;
+};
+ 
 
 
 var fight = function(enemy) {
@@ -186,6 +195,13 @@ var shop = function() {
     var shopOptionPrompt = window.prompt(
         "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter 1 for 'REFILL', 2 for 'UPGRADE', or 3 for 'LEAVE'."
         );
+
+    // check if prompt answer was left blank, player hit "cancel", or provided a number instead
+    if (shopOptionPrompt === null || shopOptionPrompt === "" || isNaN(shopOptionPrompt)) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return shop();
+    }
+
     shopOptionPrompt = parseInt(shopOptionPrompt);
     
     // Use switch to carry out action
@@ -224,12 +240,12 @@ var randomNumber = function(min, max) {
 var getPlayerName = function() {
     var name = "";
 
-while (name === "" || name === null) {
+    while (name === "" || name === null) {
     name = prompt("What is your robot's name?");
 }
 
-console.log("Your robot's name is " + name);
-return name;
+    console.log("Your robot's name is " + name);
+    return name;
 }
 
 /* END GAME FUNCTIONS */
@@ -284,6 +300,8 @@ var enemyInfo = [
         attack: randomNumber(10, 14)
     }
 ];
+
+/* END GAME INFORMATION / VARIABLES */
 
 // start the game when the page loads
 startGame();
